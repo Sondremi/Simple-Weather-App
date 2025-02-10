@@ -5,4 +5,4 @@ Uses Google Maps GeocodingAPI to get latitude and longitude from city name.
 Then uses MET Weather API to retrive the temperature
 
 # TODO
-* Add your Google Maps Geocoding API in FetchCoordinates.kt
+* Add your Google Maps Geocoding API-key in FetchCoordinates.kt
