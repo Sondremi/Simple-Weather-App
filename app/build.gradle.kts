@@ -2,7 +2,6 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
-    kotlin("plugin.serialization") version "2.0.0"
 }
 
 android {
@@ -42,14 +41,6 @@ android {
 
 dependencies {
 
-    // Ktor dependencies for HTTP Client
-    implementation ("io.ktor:ktor-client-android:2.3.0")
-    implementation ("io.ktor:ktor-client-json:2.3.0")
-    implementation ("io.ktor:ktor-client-serialization:2.3.0")
-
-    // Kotlinx serialization dependencies
-    implementation ("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.0")
-
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -59,12 +50,6 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation(libs.androidx.navigation.compose)
-
-    implementation(libs.ktor.client.core.v230)
-    implementation(libs.ktor.client.cio.v230)
-    implementation(libs.ktor.client.content.negotiation)
-    implementation(libs.ktor.serialization.kotlinx.json)
-    implementation(libs.ktor.client.serialization)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
