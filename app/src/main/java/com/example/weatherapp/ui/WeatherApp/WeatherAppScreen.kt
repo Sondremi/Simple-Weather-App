@@ -27,11 +27,9 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.weatherapp.getCoordinatesFromCity
 import com.example.weatherapp.getTemperature
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 
 @Composable
@@ -64,7 +62,6 @@ fun WeatherApp() {
                     }
                 }
             )
-
         )
 
         Spacer(modifier = Modifier.height(16.dp))

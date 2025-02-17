@@ -19,6 +19,3 @@ class MainActivity : ComponentActivity() {
 
 // Bruker MET Weather API for å hente temperatur
 // Bruker Google Maps Geocoding API for å hente koordinater fra en by
-// Bruker Coroutines for å gjøre API-kall i bakgrunnen
-
-data class Coordinates(var lat: Double, var lon: Double)
