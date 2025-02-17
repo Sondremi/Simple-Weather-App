@@ -1,9 +1,8 @@
 # Simple-Weather-App
-Enter the name of a city and check what the temperature is there
+A user-friendly app that allows you to check the current temperature in any city.
 
-Uses Google Maps GeocodingAPI to get latitude and longitude from city name
-
-Then uses MET Weather API to retrive the temperature
+* Enter the name of a city, and the app will retrieve the corresponding latitude and longitude using the Google Maps Geocoding API.
+* The app then uses the MET Weather API to fetch and display the current temperature for that location.
 
 # TODO
-* Add your Google Maps Geocoding API-key in FetchCoordinates.kt
+* Add your Google Maps Geocoding API key in FetchCoordinates.kt to enable location lookup.
