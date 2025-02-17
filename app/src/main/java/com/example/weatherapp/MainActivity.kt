@@ -17,4 +17,5 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-data class Coordinates(var lat: Double, var lon: Double)
+// Bruker MET Weather API for å hente temperatur
+// Bruker Google Maps Geocoding API for å hente koordinater fra en by

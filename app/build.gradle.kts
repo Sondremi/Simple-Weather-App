@@ -40,13 +40,6 @@ android {
 }
 
 dependencies {
-    // Legg til Coroutine-avhengigheten
-    implementation(libs.kotlinx.coroutines.android) // Sjekk for nyeste versjon
-
-    // Legg til Google Play Services Location for FusedLocationProviderClient
-    implementation(libs.play.services.location.v1800) // Sjekk for nyeste versjon
-
-    implementation(libs.kotlinx.coroutines.play.services) // Sjekk for nyeste versjon
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -56,7 +49,8 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
-    implementation(libs.play.services.location)
+    implementation(libs.androidx.navigation.compose)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
