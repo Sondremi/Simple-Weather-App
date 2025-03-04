@@ -1,4 +1,4 @@
-package com.example.weatherapp
+package com.example.weatherapp.data.weather
 
 import org.json.JSONObject
 import java.net.HttpURLConnection

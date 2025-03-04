@@ -1,5 +1,6 @@
 package com.example.weatherapp.ui.WeatherApp
 
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -12,8 +13,10 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -27,7 +30,8 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.weatherapp.getTemperature
+import com.example.weatherapp.data.map.MapViewer
+import com.example.weatherapp.data.weather.getTemperature
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -40,11 +44,16 @@ fun WeatherApp() {
 
     Column(
         modifier = Modifier
-            .padding(16.dp)
-            .fillMaxSize(),
+            .padding(0.dp)
+            .fillMaxSize()
+            .border(width = 2.dp, color = Color.Black),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        MapViewer()
+
+        Spacer(modifier = Modifier.height(16.dp))
+
         OutlinedTextField(
             value = city,
             onValueChange = { city = it },
@@ -67,7 +76,7 @@ fun WeatherApp() {
         Spacer(modifier = Modifier.height(16.dp))
 
         Text(
-            text = "Temperaturen er: $temperature",
+            text = if ("°C" !in temperature) temperature else "Temperaturen er: $temperature",
             fontSize = 20.sp,
             textAlign = TextAlign.Center,
             modifier = Modifier
