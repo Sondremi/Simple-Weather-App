@@ -6,8 +6,7 @@ import java.net.URL
 
 class FetchWeatherData {
     fun getTemperatureData(lat: Double, lon: Double): String {
-        val urlString =
-            "https://api.met.no/weatherapi/locationforecast/2.0/compact?lat=$lat&lon=$lon"
+        val urlString = "https://api.met.no/weatherapi/locationforecast/2.0/compact?lat=$lat&lon=$lon"
 
         return try {
             val url = URL(urlString)

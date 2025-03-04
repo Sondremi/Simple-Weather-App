@@ -1,5 +1,6 @@
 package com.example.weatherapp.data.location
 
+import com.example.weatherapp.data.apikeys.getGoogleGeocodeAPIkey
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.json.JSONObject
@@ -10,7 +11,7 @@ data class Coordinates(var lat: Double, var lon: Double)
 
 class FetchCoordinates {
     suspend fun getCoordinates(city: String): Coordinates? {
-        val apiKey = "" // Add your Google Maps API key here
+        val apiKey = getGoogleGeocodeAPIkey()
         val urlString = "https://maps.googleapis.com/maps/api/geocode/json?address=$city&key=$apiKey"
 
         return withContext(Dispatchers.IO) {
