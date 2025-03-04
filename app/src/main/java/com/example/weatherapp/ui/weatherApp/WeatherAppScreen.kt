@@ -1,6 +1,5 @@
 package com.example.weatherapp.ui.weatherApp
 
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -42,9 +41,7 @@ fun WeatherApp() {
 
     Column(
         modifier = Modifier
-            .padding(0.dp)
-            .fillMaxSize()
-            .border(width = 2.dp, color = Color.Black),
+            .fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -57,9 +54,7 @@ fun WeatherApp() {
             onValueChange = { city = it },
             label = { Text("Skriv inn by") },
             singleLine = true,
-            modifier = Modifier
-                .padding(8.dp)
-                .fillMaxWidth(0.8f),
+            modifier = Modifier.fillMaxWidth(0.85f),
             keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
             keyboardActions = KeyboardActions(
                 onDone = {
@@ -74,12 +69,9 @@ fun WeatherApp() {
         Spacer(modifier = Modifier.height(16.dp))
 
         Text(
-            text = if ("°C" !in temperature) temperature else "Temperaturen er: $temperature",
+            text = if ("°C" in temperature) "Temperaturen er: $temperature" else temperature,
             fontSize = 20.sp,
-            textAlign = TextAlign.Center,
-            modifier = Modifier
-                .padding(8.dp)
-                .fillMaxWidth()
+            textAlign = TextAlign.Center
         )
 
         Spacer(modifier = Modifier.height(16.dp))

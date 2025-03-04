@@ -10,6 +10,6 @@ suspend fun getTemperature(city: String): String {
     return if (coordinates != null) {
         fetchWeatherData.getTemperatureData(coordinates.lat, coordinates.lon)
     } else {
-        "Kunne ikke hente koordinater for byen"
+        "Kunne ikke hente koordinater"
     }
 }
