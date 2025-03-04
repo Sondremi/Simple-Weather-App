@@ -10,7 +10,7 @@ data class Coordinates(var lat: Double, var lon: Double)
 
 class FetchCoordinates {
     suspend fun getCoordinates(city: String): Coordinates? {
-        val apiKey = "AIzaSyDbXPQBVu0q_wSc3BH9lwsooz6r7e2i-u4" // Add your Google Maps API key here
+        val apiKey = "" // Add your Google Maps API key here
         val urlString = "https://maps.googleapis.com/maps/api/geocode/json?address=$city&key=$apiKey"
 
         return withContext(Dispatchers.IO) {
