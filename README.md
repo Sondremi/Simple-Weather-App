@@ -5,4 +5,4 @@ A user-friendly app that allows you to check the current temperature in any city
 * The app then uses the MET Weather API to fetch and display the current temperature for that location.
 
 # TODO
-* Add your API key in GoogleGeocodingAPIkey.kt to enable location lookup.
+* Add MAPS_API_KEY=YOUR_API_KEY in local.properties to enable location lookup.
