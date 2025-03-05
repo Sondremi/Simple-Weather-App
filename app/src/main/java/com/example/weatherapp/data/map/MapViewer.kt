@@ -88,7 +88,9 @@ fun MapViewer(city: String) {
                     MapStyle(style = selectedStyle)
                 }
             },
-            scaleBar = { }
+            scaleBar = { },
+            logo = { },
+            attribution = { }
         )
 
         Column(
