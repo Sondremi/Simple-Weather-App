@@ -26,6 +26,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -78,7 +79,10 @@ fun WeatherApp() {
                 label = { Text("Skriv inn by") },
                 singleLine = true,
                 modifier = Modifier.fillMaxWidth(),
-                keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
+                keyboardOptions = KeyboardOptions.Default.copy(
+                    imeAction = ImeAction.Done,
+                    keyboardType = KeyboardType.Text
+                ),
                 keyboardActions = KeyboardActions(
                     onDone = {
                         keyboardController?.hide()
