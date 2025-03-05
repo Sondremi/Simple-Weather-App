@@ -1,14 +1,11 @@
 package com.example.weatherapp.data.weather
 
-import com.example.weatherapp.data.location.FetchCoordinates
+import com.example.weatherapp.data.location.getCoordinates
 
 suspend fun getTemperature(city: String): String {
-    val fetchCoordinates = FetchCoordinates()
-    val fetchWeatherData = FetchWeatherData()
-
-    val coordinates = fetchCoordinates.getCoordinates(city)
+    val coordinates = getCoordinates(city)
     return if (coordinates != null) {
-        fetchWeatherData.getTemperatureData(coordinates.lat, coordinates.lon)
+        getTemperatureData(coordinates.lat, coordinates.lon)
     } else {
         "Kunne ikke hente koordinater"
     }
