@@ -76,14 +76,15 @@ fun MapViewer(city: String) {
             mapViewportState = mapViewportState,
             style = {
                 MapboxStandardStyle {
-                    if (isDarkMode) {
-                        lightPreset = LightPresetValue.NIGHT
+                    lightPreset = if (isDarkMode) {
+                        LightPresetValue.NIGHT
                     } else {
-                        lightPreset = LightPresetValue.DAY
+                        LightPresetValue.DAY
                     }
                     showPlaceLabels = BooleanValue(true)
                 }
-            }
+            },
+            scaleBar = { }
         )
         Row(
             modifier = Modifier
