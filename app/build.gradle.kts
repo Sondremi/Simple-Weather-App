@@ -10,6 +10,7 @@ val localProperties = Properties()
 val localPropertiesFile = rootProject.file("local.properties")
 if (localPropertiesFile.exists()) { localProperties.load(localPropertiesFile.inputStream()) }
 val mapsApiKey = localProperties.getProperty("MAPS_API_KEY") ?: error("MAPS_API_KEY is missing!")
+val mapboxApiKey = localProperties.getProperty("MAP_BOX_API_KEY") ?: error("MAP_BOX_API_KEY is missing!")
 
 android {
     namespace = "com.example.weatherapp"
@@ -23,6 +24,7 @@ android {
         versionName = "1.0"
 
         buildConfigField("String", "MAPS_API_KEY", "\"$mapsApiKey\"")
+        buildConfigField("String", "MAP_BOX_API_KEY", "\"${mapboxApiKey}\"")
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -60,9 +62,13 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation(libs.androidx.navigation.compose)
+
     implementation("com.google.android.gms:play-services-maps:18.2.0")
     implementation("com.google.maps.android:maps-compose:2.11.4")
     implementation("com.google.android.material:material:1.8.0")
+
+    implementation("com.mapbox.maps:android:11.10.2")
+    implementation("com.mapbox.extension:maps-compose:11.10.2")
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
