@@ -107,14 +107,13 @@ fun MapViewer(city: String) {
                 modifier = Modifier
                     .size(80.dp, 32.dp),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = Color.Gray.copy(alpha = 0.5f), // Gjennomsiktig bakgrunn
-                    contentColor = Color.White // Lys tekst for kontrast
+                    containerColor = Color.Gray.copy(alpha = 0.5f),
+                    contentColor = Color.White
                 ),
-                shape = RoundedCornerShape(8.dp) // Litt avrundede kanter
+                shape = RoundedCornerShape(8.dp)
             ) {
                 Text("Light", fontSize = 12.sp)
             }
         }
-
     }
 }
