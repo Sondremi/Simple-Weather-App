@@ -55,7 +55,9 @@ fun WeatherApp() {
                 textAlign = TextAlign.Center,
                 fontSize = 30.sp,
                 color = Color.White,
-                modifier = Modifier.background(Color(0xFF6200EE))
+                modifier = Modifier
+                    .background(Color(0xFF6200EE))
+                    .padding(4.dp)
             )
         }
 
