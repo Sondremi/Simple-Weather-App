@@ -56,7 +56,7 @@ fun MapViewer(city: String) {
             .clip(RoundedCornerShape(12.dp)),
         mapViewportState = mapViewportState,
         style = {
-            MapboxStandardSatelliteStyle{
+            MapboxStandardSatelliteStyle {
                     lightPreset = LightPresetValue.DEFAULT
                     showPlaceLabels = BooleanValue(true)
             }
