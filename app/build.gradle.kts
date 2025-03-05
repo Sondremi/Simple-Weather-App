@@ -65,8 +65,6 @@ dependencies {
 
     implementation("com.mapbox.maps:android:11.10.2")
     implementation("com.mapbox.extension:maps-compose:11.10.2")
-//    implementation("com.mapbox.maps:mapbox-android-plugin-locationlayer:0.13.0")
-//    implementation("com.mapbox.maps:mapbox-sdk-android:10.10.0")
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

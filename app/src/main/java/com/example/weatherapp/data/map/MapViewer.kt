@@ -1,8 +1,11 @@
 package com.example.weatherapp.data.map
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -24,6 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.LineHeightStyle
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.weatherapp.data.location.Coordinates
@@ -42,7 +46,7 @@ import com.mapbox.maps.Style
 fun MapViewer(city: String) {
     val defaultCoordinates = Coordinates(59.9138688, 10.7522454) // Oslo
     var coordinates by remember { mutableStateOf(defaultCoordinates) }
-    var isDarkMode by remember { mutableStateOf(true) }
+    var isDarkMode by remember { mutableStateOf(false) }
 
     val mapViewportState = rememberMapViewportState {
         setCameraOptions {
@@ -86,34 +90,44 @@ fun MapViewer(city: String) {
             },
             scaleBar = { }
         )
-        Row(
+        Box(
             modifier = Modifier
+                .padding(8.dp)
                 .align(Alignment.BottomEnd)
+                .clip(RoundedCornerShape(12.dp))
+                .background(Color.White.copy(alpha = 0.7f))
         ) {
-            Button(
-                onClick = { isDarkMode = true },
+            Row(
                 modifier = Modifier
-                    .size(80.dp, 32.dp)
-                    .padding(end = 4.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color.Gray.copy(alpha = 0.5f),
-                    contentColor = Color.White
-                ),
-                shape = RoundedCornerShape(8.dp)
+                    .padding(4.dp)
             ) {
-                Text("Dark Mode", fontSize = 12.sp)
-            }
-            Button(
-                onClick = { isDarkMode = false },
-                modifier = Modifier
-                    .size(80.dp, 32.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color.Gray.copy(alpha = 0.5f),
-                    contentColor = Color.White
-                ),
-                shape = RoundedCornerShape(8.dp)
-            ) {
-                Text("Light", fontSize = 12.sp)
+                Button(
+                    onClick = { isDarkMode = false },
+                    modifier = Modifier
+                        .size(60.dp, 30.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color.Gray,
+                        contentColor = Color.White
+                    ),
+                    shape = RoundedCornerShape(8.dp),
+                    contentPadding = PaddingValues(0.dp)
+                ) {
+                    Text("Light", fontSize = 10.sp, textAlign = TextAlign.Center)
+                }
+                Spacer(modifier = Modifier.width(4.dp))
+                Button(
+                    onClick = { isDarkMode = true },
+                    modifier = Modifier
+                        .size(60.dp, 30.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color.Gray,
+                        contentColor = Color.White
+                    ),
+                    shape = RoundedCornerShape(8.dp),
+                    contentPadding = PaddingValues(0.dp)
+                ) {
+                    Text("Dark", fontSize = 10.sp, textAlign = TextAlign.Center)
+                }
             }
         }
     }
