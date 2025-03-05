@@ -1,9 +1,7 @@
 package com.example.weatherapp.ui.weatherApp
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,11 +13,9 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -35,7 +31,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.weatherapp.data.map.MapViewer
 import com.example.weatherapp.data.weather.getTemperature
-import com.example.weatherapp.ui.theme.WeatherAppTheme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -43,7 +38,8 @@ import kotlinx.coroutines.launch
 @Composable
 fun WeatherApp() {
     var temperature by remember { mutableStateOf("") }
-    var city by remember { mutableStateOf("") }
+    var cityInput by remember { mutableStateOf("") }
+    var selectedCity by remember { mutableStateOf("") }
     val keyboardController = LocalSoftwareKeyboardController.current
 
     Column(
@@ -70,13 +66,13 @@ fun WeatherApp() {
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            MapViewer()
+            MapViewer(selectedCity)
 
             Spacer(modifier = Modifier.height(16.dp))
 
             OutlinedTextField(
-                value = city,
-                onValueChange = { city = it },
+                value = cityInput,
+                onValueChange = { cityInput = it },
                 label = { Text("Skriv inn by") },
                 singleLine = true,
                 modifier = Modifier.fillMaxWidth(),
@@ -84,8 +80,9 @@ fun WeatherApp() {
                 keyboardActions = KeyboardActions(
                     onDone = {
                         keyboardController?.hide()
+                        selectedCity = cityInput
                         CoroutineScope(Dispatchers.IO).launch {
-                            temperature = getTemperature(city)
+                            temperature = getTemperature(cityInput)
                         }
                     }
                 )
@@ -95,8 +92,9 @@ fun WeatherApp() {
 
             Button(
                 onClick = {
+                    selectedCity = cityInput
                     CoroutineScope(Dispatchers.IO).launch {
-                        temperature = getTemperature(city)
+                        temperature = getTemperature(cityInput)
                     }
                     keyboardController?.hide()
                 },
