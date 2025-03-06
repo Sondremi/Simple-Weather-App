@@ -52,23 +52,22 @@ fun WeatherApp() {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Surface(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(Color(0xFFF2F2F7)),
         ) {
             Text(
                 text = "Weather App",
                 textAlign = TextAlign.Center,
                 fontSize = 30.sp,
-                color = Color.White,
+                color = Color(0xFF1C1C1E),
                 modifier = Modifier
-                    .background(Color(0xFF6200EE))
-                    .padding(4.dp)
+                    .padding(12.dp)
             )
         }
 
-        Spacer(modifier = Modifier.height(16.dp))
-
         Column(
-            modifier = Modifier.weight(1f).padding(16.dp),
+            modifier = Modifier.padding(16.dp),
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -115,14 +114,14 @@ fun WeatherApp() {
                     }
                     keyboardController?.hide()
                 },
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF6200EE)),
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF007AFF)),
                 shape = RoundedCornerShape(12.dp),
                 modifier = Modifier
                     .padding(8.dp)
                     .fillMaxWidth(0.6f)
                     .height(50.dp)
             ) {
-                Text(text = "Hent Temperatur", fontSize = 18.sp)
+                Text(text = "Hent Temperatur", fontSize = 18.sp, color = Color.White)
             }
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -130,7 +129,8 @@ fun WeatherApp() {
             Text(
                 text = if ("°C" in temperature) "Temperaturen er: $temperature" else temperature,
                 fontSize = 20.sp,
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
+                color = Color(0xFF1C1C1E)
             )
         }
     }

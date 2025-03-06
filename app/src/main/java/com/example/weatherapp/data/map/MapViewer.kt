@@ -28,9 +28,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.weatherapp.R
 import com.example.weatherapp.data.location.Coordinates
 import com.example.weatherapp.data.location.getCoordinates
 import com.example.weatherapp.data.weather.getTemperature
+import com.example.weatherapp.ui.theme.WeatherAppTheme
+import com.mapbox.geojson.Point
 import com.mapbox.maps.extension.compose.MapboxMap
 import com.mapbox.maps.extension.compose.animation.viewport.rememberMapViewportState
 import com.mapbox.geojson.Point.fromLngLat
@@ -38,9 +41,18 @@ import com.mapbox.maps.extension.compose.style.standard.LightPresetValue
 import com.mapbox.maps.extension.compose.style.standard.MapboxStandardStyle
 import com.mapbox.maps.Style
 import com.mapbox.maps.extension.compose.style.MapStyle
+import com.mapbox.maps.plugin.annotation.generated.PointAnnotationOptions
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import com.mapbox.maps.MapView
+import com.mapbox.maps.extension.compose.MapboxMapComposable
+import com.mapbox.maps.extension.compose.annotation.IconImage
+import com.mapbox.maps.extension.compose.annotation.generated.PointAnnotation
+import com.mapbox.maps.extension.compose.annotation.rememberIconImage
+import com.mapbox.maps.plugin.annotation.annotations
+import com.mapbox.maps.plugin.annotation.generated.PointAnnotationManager
+import com.mapbox.maps.plugin.annotation.generated.createPointAnnotationManager
 
 @Composable
 fun MapViewer(city: String, onCoordinatesSelected: (Coordinates) -> Unit) {
@@ -48,10 +60,12 @@ fun MapViewer(city: String, onCoordinatesSelected: (Coordinates) -> Unit) {
     var coordinates by remember { mutableStateOf(defaultCoordinates) }
     var isDarkMode by remember { mutableStateOf(false) }
     var selectedStyle by remember { mutableStateOf(Style.STANDARD) }
+    var markers by remember { mutableStateOf(listOf<Point>()) }
+
 
     val mapViewportState = rememberMapViewportState {
         setCameraOptions {
-            zoom(10.0)
+            zoom(12.0)
             center(fromLngLat(defaultCoordinates.lon, defaultCoordinates.lat))
             pitch(0.0)
             bearing(0.0)
@@ -68,7 +82,7 @@ fun MapViewer(city: String, onCoordinatesSelected: (Coordinates) -> Unit) {
     LaunchedEffect(coordinates) {
         mapViewportState.setCameraOptions {
             center(fromLngLat(coordinates.lon, coordinates.lat))
-            zoom(10.0)
+            zoom(12.0)
         }
     }
 
@@ -96,14 +110,20 @@ fun MapViewer(city: String, onCoordinatesSelected: (Coordinates) -> Unit) {
             logo = { },
             attribution = { },
             onMapClickListener = { point ->
-                mapViewportState.setCameraOptions {
-                    center(point)
-                }
+                //mapViewportState.setCameraOptions { center(point) }
                 coordinates = Coordinates(point.latitude(), point.longitude())
                 onCoordinatesSelected(coordinates)
+                markers = markers + Point.fromLngLat(coordinates.lon, coordinates.lat)
                 true
             }
-        )
+        ) {
+            if (markers.isNotEmpty()) {
+                val marker = rememberIconImage(R.drawable.red_marker)
+                PointAnnotation(point = Point.fromLngLat(coordinates.lon, coordinates.lat)) {
+                    iconImage = marker
+                }
+            }
+        }
 
         Column(
             modifier = Modifier
@@ -147,14 +167,14 @@ fun MapViewer(city: String, onCoordinatesSelected: (Coordinates) -> Unit) {
 fun MapButton(text: String, onClick: () -> Unit) {
     Button(
         onClick = onClick,
-        modifier = Modifier.size(60.dp, 30.dp),
+        modifier = Modifier.size(50.dp, 20.dp),
         colors = ButtonDefaults.buttonColors(
-            containerColor = Color.Gray,
+            containerColor = Color(0xFF007AFF),
             contentColor = Color.White
         ),
-        shape = RoundedCornerShape(8.dp),
+        shape = RoundedCornerShape(12.dp),
         contentPadding = PaddingValues(0.dp)
     ) {
-        Text(text, fontSize = 10.sp, textAlign = TextAlign.Center)
+        Text(text, fontSize = 8.sp, textAlign = TextAlign.Center)
     }
 }
