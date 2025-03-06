@@ -4,7 +4,7 @@ import org.json.JSONObject
 import java.net.HttpURLConnection
 import java.net.URL
 
-fun getTemperatureData(lat: Double, lon: Double): String {
+fun getTemperature(lat: Double, lon: Double): String {
     val urlString = "https://api.met.no/weatherapi/locationforecast/2.0/compact?lat=$lat&lon=$lon"
 
     return try {

@@ -20,10 +20,10 @@ suspend fun getCityNameFromCoordinates(coordinates: Coordinates): String {
             if (responseCode == HttpURLConnection.HTTP_OK) {
                 val response = connection.inputStream.bufferedReader().use { it.readText() }
                 val json = JSONObject(response)
-
                 val features = json.getJSONArray("features")
+
                 if (features.length() > 0) {
-                    return@withContext features.getJSONObject(0).getString("text")
+                    return@withContext features.getJSONObject(0).getString("place_name")
                 }
             }
             "Ukjent sted"

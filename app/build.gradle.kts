@@ -9,7 +9,6 @@ plugins {
 val localProperties = Properties()
 val localPropertiesFile = rootProject.file("local.properties")
 if (localPropertiesFile.exists()) { localProperties.load(localPropertiesFile.inputStream()) }
-val mapsApiKey = localProperties.getProperty("MAPS_API_KEY") ?: error("MAPS_API_KEY is missing!")
 val mapboxApiKey = localProperties.getProperty("MAP_BOX_API_KEY") ?: error("MAP_BOX_API_KEY is missing!")
 
 android {
@@ -23,7 +22,6 @@ android {
         versionCode = 1
         versionName = "1.0"
 
-        buildConfigField("String", "MAPS_API_KEY", "\"$mapsApiKey\"")
         buildConfigField("String", "MAP_BOX_API_KEY", "\"${mapboxApiKey}\"")
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -62,7 +60,6 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation(libs.androidx.navigation.compose)
-
     implementation("com.mapbox.maps:android:11.10.2")
     implementation("com.mapbox.extension:maps-compose:11.10.2")
 

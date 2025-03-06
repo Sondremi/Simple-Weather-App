@@ -3,18 +3,13 @@ package com.example.weatherapp.data.map
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -26,13 +21,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.example.weatherapp.R
 import com.example.weatherapp.data.location.Coordinates
 import com.example.weatherapp.data.location.getCoordinates
-import com.mapbox.geojson.Point
 import com.mapbox.maps.extension.compose.MapboxMap
 import com.mapbox.maps.extension.compose.animation.viewport.rememberMapViewportState
 import com.mapbox.geojson.Point.fromLngLat
@@ -49,7 +41,6 @@ fun MapViewer(city: String, onCoordinatesSelected: (Coordinates) -> Unit) {
     var coordinates by remember { mutableStateOf(defaultCoordinates) }
     var isDarkMode by remember { mutableStateOf(false) }
     var selectedStyle by remember { mutableStateOf(Style.STANDARD) }
-    var markers by remember { mutableStateOf(listOf<Point>()) }
     var zoom by remember { mutableDoubleStateOf(12.0) }
 
     val mapViewportState = rememberMapViewportState {
@@ -99,20 +90,18 @@ fun MapViewer(city: String, onCoordinatesSelected: (Coordinates) -> Unit) {
                 }
             },
             onMapClickListener = { point ->
-                coordinates = Coordinates(point.latitude(), point.longitude())
-                onCoordinatesSelected(coordinates)
-                markers = markers + fromLngLat(coordinates.lon, coordinates.lat)
+                val newCoordinates = Coordinates(point.latitude(), point.longitude())
+                coordinates = newCoordinates
+                onCoordinatesSelected(newCoordinates)
                 true
             },
             scaleBar = { },
             logo = { },
             attribution = { }
         ) {
-            if (markers.isNotEmpty()) {
-                val marker = rememberIconImage(R.drawable.red_marker)
-                PointAnnotation(point = fromLngLat(coordinates.lon, coordinates.lat)) {
-                    iconImage = marker
-                }
+            val marker = rememberIconImage(R.drawable.red_marker)
+            PointAnnotation(point = fromLngLat(coordinates.lon, coordinates.lat)) {
+                iconImage = marker
             }
         }
 
@@ -151,21 +140,5 @@ fun MapViewer(city: String, onCoordinatesSelected: (Coordinates) -> Unit) {
                 }
             }
         }
-    }
-}
-
-@Composable
-fun MapButton(text: String, onClick: () -> Unit) {
-    Button(
-        onClick = onClick,
-        modifier = Modifier.size(50.dp, 20.dp),
-        colors = ButtonDefaults.buttonColors(
-            containerColor = Color(0xFF007AFF),
-            contentColor = Color.White
-        ),
-        shape = RoundedCornerShape(12.dp),
-        contentPadding = PaddingValues(0.dp)
-    ) {
-        Text(text, fontSize = 8.sp, textAlign = TextAlign.Center)
     }
 }

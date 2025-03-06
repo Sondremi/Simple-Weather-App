@@ -8,7 +8,7 @@ import java.net.HttpURLConnection
 import java.net.URL
 
 suspend fun getCoordinates(city: String): Coordinates? {
-    val urlString = "https://maps.googleapis.com/maps/api/geocode/json?address=$city&key=${BuildConfig.MAPS_API_KEY}"
+    val urlString = "https://api.mapbox.com/geocoding/v5/mapbox.places/$city.json?access_token=${BuildConfig.MAP_BOX_API_KEY}"
 
     return withContext(Dispatchers.IO) {
         try {
@@ -22,13 +22,12 @@ suspend fun getCoordinates(city: String): Coordinates? {
 
             if (responseCode == HttpURLConnection.HTTP_OK) {
                 val json = JSONObject(responseText)
-                val results = json.getJSONArray("results")
-                if (results.length() > 0) {
-                    val location = results.getJSONObject(0)
-                        .getJSONObject("geometry")
-                        .getJSONObject("location")
-                    val lat = location.getDouble("lat")
-                    val lon = location.getDouble("lng")
+                val features = json.getJSONArray("features")
+                if (features.length() > 0) {
+                    val geometry = features.getJSONObject(0).getJSONObject("geometry")
+                    val location = geometry.getJSONArray("coordinates")
+                    val lon = location.getDouble(0)
+                    val lat = location.getDouble(1)
                     return@withContext Coordinates(lat, lon)
                 }
             }

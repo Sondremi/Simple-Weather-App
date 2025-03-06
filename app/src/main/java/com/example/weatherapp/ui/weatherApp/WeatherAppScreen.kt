@@ -33,7 +33,7 @@ import com.example.weatherapp.data.location.Coordinates
 import com.example.weatherapp.data.location.getCityNameFromCoordinates
 import com.example.weatherapp.data.map.MapViewer
 import com.example.weatherapp.data.weather.getTemperature
-import com.example.weatherapp.data.weather.getTemperatureData
+import com.example.weatherapp.data.weather.getTemperatureFromCity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -43,6 +43,7 @@ fun WeatherApp() {
     var temperature by remember { mutableStateOf("") }
     var cityInput by remember { mutableStateOf("") }
     var selectedCity by remember { mutableStateOf("") }
+    var displayedCity by remember { mutableStateOf("") }
     var selectedCoordinates by remember { mutableStateOf<Coordinates?>(null) }
     val keyboardController = LocalSoftwareKeyboardController.current
 
@@ -75,8 +76,10 @@ fun WeatherApp() {
                 onCoordinatesSelected = { newCoordinates ->
                     selectedCoordinates = newCoordinates
                     CoroutineScope(Dispatchers.IO).launch {
-                        selectedCity = getCityNameFromCoordinates(newCoordinates)
-                        temperature = getTemperatureData(selectedCoordinates!!.lat, selectedCoordinates!!.lon)
+                        val fullAddress = getCityNameFromCoordinates(newCoordinates)
+                        selectedCity = fullAddress
+                        displayedCity = fullAddress.split(",").firstOrNull() ?: fullAddress
+                        temperature = getTemperature(selectedCoordinates!!.lat, selectedCoordinates!!.lon)
                     }
                 }
             )
@@ -97,8 +100,9 @@ fun WeatherApp() {
                     onDone = {
                         keyboardController?.hide()
                         selectedCity = cityInput
+                        displayedCity = cityInput
                         CoroutineScope(Dispatchers.IO).launch {
-                            temperature = getTemperature(cityInput)
+                            temperature = getTemperatureFromCity(cityInput)
                         }
                     }
                 )
@@ -109,8 +113,9 @@ fun WeatherApp() {
             Button(
                 onClick = {
                     selectedCity = cityInput
+                    displayedCity = cityInput
                     CoroutineScope(Dispatchers.IO).launch {
-                        temperature = getTemperature(cityInput)
+                        temperature = getTemperatureFromCity(cityInput)
                     }
                     keyboardController?.hide()
                 },
@@ -127,7 +132,11 @@ fun WeatherApp() {
             Spacer(modifier = Modifier.height(16.dp))
 
             Text(
-                text = if ("°C" in temperature) "Temperaturen i $selectedCity er: $temperature" else temperature,
+                text = if ("°C" in temperature) {
+                    "Temperaturen i $displayedCity er: $temperature"
+                } else {
+                    temperature
+                },
                 fontSize = 20.sp,
                 textAlign = TextAlign.Center,
                 color = Color(0xFF1C1C1E)
