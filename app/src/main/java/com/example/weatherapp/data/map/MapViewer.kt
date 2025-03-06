@@ -30,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.weatherapp.data.location.Coordinates
 import com.example.weatherapp.data.location.getCoordinates
+import com.example.weatherapp.data.weather.getTemperature
 import com.mapbox.maps.extension.compose.MapboxMap
 import com.mapbox.maps.extension.compose.animation.viewport.rememberMapViewportState
 import com.mapbox.geojson.Point.fromLngLat
@@ -37,9 +38,12 @@ import com.mapbox.maps.extension.compose.style.standard.LightPresetValue
 import com.mapbox.maps.extension.compose.style.standard.MapboxStandardStyle
 import com.mapbox.maps.Style
 import com.mapbox.maps.extension.compose.style.MapStyle
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @Composable
-fun MapViewer(city: String) {
+fun MapViewer(city: String, onCoordinatesSelected: (Coordinates) -> Unit) {
     val defaultCoordinates = Coordinates(59.9138688, 10.7522454) // Oslo
     var coordinates by remember { mutableStateOf(defaultCoordinates) }
     var isDarkMode by remember { mutableStateOf(false) }
@@ -90,7 +94,15 @@ fun MapViewer(city: String) {
             },
             scaleBar = { },
             logo = { },
-            attribution = { }
+            attribution = { },
+            onMapClickListener = { point ->
+                mapViewportState.setCameraOptions {
+                    center(point)
+                }
+                coordinates = Coordinates(point.latitude(), point.longitude())
+                onCoordinatesSelected(coordinates)
+                true
+            }
         )
 
         Column(

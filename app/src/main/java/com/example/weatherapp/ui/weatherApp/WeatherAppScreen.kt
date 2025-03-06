@@ -30,8 +30,10 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.weatherapp.data.location.Coordinates
 import com.example.weatherapp.data.map.MapViewer
 import com.example.weatherapp.data.weather.getTemperature
+import com.example.weatherapp.data.weather.getTemperatureData
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -41,6 +43,7 @@ fun WeatherApp() {
     var temperature by remember { mutableStateOf("") }
     var cityInput by remember { mutableStateOf("") }
     var selectedCity by remember { mutableStateOf("") }
+    var selectedCoordinates by remember { mutableStateOf<Coordinates?>(null) }
     val keyboardController = LocalSoftwareKeyboardController.current
 
     Column(
@@ -69,7 +72,15 @@ fun WeatherApp() {
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            MapViewer(selectedCity)
+            MapViewer(
+                city = selectedCity,
+                onCoordinatesSelected = { newCoordinates ->
+                    selectedCoordinates = newCoordinates
+                    CoroutineScope(Dispatchers.IO).launch {
+                        temperature = getTemperatureData(selectedCoordinates!!.lat, selectedCoordinates!!.lon)
+                    }
+                }
+            )
 
             Spacer(modifier = Modifier.height(16.dp))
 
