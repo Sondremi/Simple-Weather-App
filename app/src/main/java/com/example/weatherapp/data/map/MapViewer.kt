@@ -18,6 +18,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableDoubleStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -28,9 +29,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.weatherapp.R
 import com.example.weatherapp.data.location.Coordinates
 import com.example.weatherapp.data.location.getCoordinates
-import com.example.weatherapp.data.weather.getTemperature
+import com.mapbox.geojson.Point
 import com.mapbox.maps.extension.compose.MapboxMap
 import com.mapbox.maps.extension.compose.animation.viewport.rememberMapViewportState
 import com.mapbox.geojson.Point.fromLngLat
@@ -38,9 +40,8 @@ import com.mapbox.maps.extension.compose.style.standard.LightPresetValue
 import com.mapbox.maps.extension.compose.style.standard.MapboxStandardStyle
 import com.mapbox.maps.Style
 import com.mapbox.maps.extension.compose.style.MapStyle
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import com.mapbox.maps.extension.compose.annotation.generated.PointAnnotation
+import com.mapbox.maps.extension.compose.annotation.rememberIconImage
 
 @Composable
 fun MapViewer(city: String, onCoordinatesSelected: (Coordinates) -> Unit) {
@@ -48,10 +49,12 @@ fun MapViewer(city: String, onCoordinatesSelected: (Coordinates) -> Unit) {
     var coordinates by remember { mutableStateOf(defaultCoordinates) }
     var isDarkMode by remember { mutableStateOf(false) }
     var selectedStyle by remember { mutableStateOf(Style.STANDARD) }
+    var markers by remember { mutableStateOf(listOf<Point>()) }
+    var zoom by remember { mutableDoubleStateOf(12.0) }
 
     val mapViewportState = rememberMapViewportState {
         setCameraOptions {
-            zoom(10.0)
+            zoom(zoom)
             center(fromLngLat(defaultCoordinates.lon, defaultCoordinates.lat))
             pitch(0.0)
             bearing(0.0)
@@ -61,14 +64,17 @@ fun MapViewer(city: String, onCoordinatesSelected: (Coordinates) -> Unit) {
     LaunchedEffect(city) {
         if (city.isNotEmpty()) {
             val newCoordinates = getCoordinates(city)
-            coordinates = newCoordinates ?: defaultCoordinates
+            if (newCoordinates != null && newCoordinates != coordinates) {
+                coordinates = newCoordinates
+            }
         }
     }
 
     LaunchedEffect(coordinates) {
+        zoom = mapViewportState.cameraState?.zoom ?: 12.0
         mapViewportState.setCameraOptions {
             center(fromLngLat(coordinates.lon, coordinates.lat))
-            zoom(10.0)
+            zoom(zoom)
         }
     }
 
@@ -92,18 +98,23 @@ fun MapViewer(city: String, onCoordinatesSelected: (Coordinates) -> Unit) {
                     MapStyle(style = selectedStyle)
                 }
             },
-            scaleBar = { },
-            logo = { },
-            attribution = { },
             onMapClickListener = { point ->
-                mapViewportState.setCameraOptions {
-                    center(point)
-                }
                 coordinates = Coordinates(point.latitude(), point.longitude())
                 onCoordinatesSelected(coordinates)
+                markers = markers + fromLngLat(coordinates.lon, coordinates.lat)
                 true
+            },
+            scaleBar = { },
+            logo = { },
+            attribution = { }
+        ) {
+            if (markers.isNotEmpty()) {
+                val marker = rememberIconImage(R.drawable.red_marker)
+                PointAnnotation(point = fromLngLat(coordinates.lon, coordinates.lat)) {
+                    iconImage = marker
+                }
             }
-        )
+        }
 
         Column(
             modifier = Modifier
@@ -147,14 +158,14 @@ fun MapViewer(city: String, onCoordinatesSelected: (Coordinates) -> Unit) {
 fun MapButton(text: String, onClick: () -> Unit) {
     Button(
         onClick = onClick,
-        modifier = Modifier.size(60.dp, 30.dp),
+        modifier = Modifier.size(50.dp, 20.dp),
         colors = ButtonDefaults.buttonColors(
-            containerColor = Color.Gray,
+            containerColor = Color(0xFF007AFF),
             contentColor = Color.White
         ),
-        shape = RoundedCornerShape(8.dp),
+        shape = RoundedCornerShape(12.dp),
         contentPadding = PaddingValues(0.dp)
     ) {
-        Text(text, fontSize = 10.sp, textAlign = TextAlign.Center)
+        Text(text, fontSize = 8.sp, textAlign = TextAlign.Center)
     }
 }

@@ -1,6 +1,5 @@
 package com.example.weatherapp.ui.weatherApp
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -31,6 +30,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.weatherapp.data.location.Coordinates
+import com.example.weatherapp.data.location.getCityNameFromCoordinates
 import com.example.weatherapp.data.map.MapViewer
 import com.example.weatherapp.data.weather.getTemperature
 import com.example.weatherapp.data.weather.getTemperatureData
@@ -52,23 +52,21 @@ fun WeatherApp() {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Surface(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
         ) {
             Text(
                 text = "Weather App",
                 textAlign = TextAlign.Center,
                 fontSize = 30.sp,
-                color = Color.White,
+                color = Color(0xFF1C1C1E),
                 modifier = Modifier
-                    .background(Color(0xFF6200EE))
-                    .padding(4.dp)
+                    .padding(top = 16.dp)
             )
         }
 
-        Spacer(modifier = Modifier.height(16.dp))
-
         Column(
-            modifier = Modifier.weight(1f).padding(16.dp),
+            modifier = Modifier.padding(16.dp),
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -77,6 +75,7 @@ fun WeatherApp() {
                 onCoordinatesSelected = { newCoordinates ->
                     selectedCoordinates = newCoordinates
                     CoroutineScope(Dispatchers.IO).launch {
+                        selectedCity = getCityNameFromCoordinates(newCoordinates)
                         temperature = getTemperatureData(selectedCoordinates!!.lat, selectedCoordinates!!.lon)
                     }
                 }
@@ -115,22 +114,23 @@ fun WeatherApp() {
                     }
                     keyboardController?.hide()
                 },
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF6200EE)),
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF007AFF)),
                 shape = RoundedCornerShape(12.dp),
                 modifier = Modifier
-                    .padding(8.dp)
+                    .padding(12.dp)
                     .fillMaxWidth(0.6f)
                     .height(50.dp)
             ) {
-                Text(text = "Hent Temperatur", fontSize = 18.sp)
+                Text(text = "Hent Temperatur", fontSize = 18.sp, color = Color.White)
             }
 
             Spacer(modifier = Modifier.height(16.dp))
 
             Text(
-                text = if ("°C" in temperature) "Temperaturen er: $temperature" else temperature,
+                text = if ("°C" in temperature) "Temperaturen i $selectedCity er: $temperature" else temperature,
                 fontSize = 20.sp,
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
+                color = Color(0xFF1C1C1E)
             )
         }
     }
