@@ -18,6 +18,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableDoubleStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -31,8 +32,6 @@ import androidx.compose.ui.unit.sp
 import com.example.weatherapp.R
 import com.example.weatherapp.data.location.Coordinates
 import com.example.weatherapp.data.location.getCoordinates
-import com.example.weatherapp.data.weather.getTemperature
-import com.example.weatherapp.ui.theme.WeatherAppTheme
 import com.mapbox.geojson.Point
 import com.mapbox.maps.extension.compose.MapboxMap
 import com.mapbox.maps.extension.compose.animation.viewport.rememberMapViewportState
@@ -41,18 +40,8 @@ import com.mapbox.maps.extension.compose.style.standard.LightPresetValue
 import com.mapbox.maps.extension.compose.style.standard.MapboxStandardStyle
 import com.mapbox.maps.Style
 import com.mapbox.maps.extension.compose.style.MapStyle
-import com.mapbox.maps.plugin.annotation.generated.PointAnnotationOptions
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import com.mapbox.maps.MapView
-import com.mapbox.maps.extension.compose.MapboxMapComposable
-import com.mapbox.maps.extension.compose.annotation.IconImage
 import com.mapbox.maps.extension.compose.annotation.generated.PointAnnotation
 import com.mapbox.maps.extension.compose.annotation.rememberIconImage
-import com.mapbox.maps.plugin.annotation.annotations
-import com.mapbox.maps.plugin.annotation.generated.PointAnnotationManager
-import com.mapbox.maps.plugin.annotation.generated.createPointAnnotationManager
 
 @Composable
 fun MapViewer(city: String, onCoordinatesSelected: (Coordinates) -> Unit) {
@@ -61,11 +50,11 @@ fun MapViewer(city: String, onCoordinatesSelected: (Coordinates) -> Unit) {
     var isDarkMode by remember { mutableStateOf(false) }
     var selectedStyle by remember { mutableStateOf(Style.STANDARD) }
     var markers by remember { mutableStateOf(listOf<Point>()) }
-
+    var zoom by remember { mutableDoubleStateOf(12.0) }
 
     val mapViewportState = rememberMapViewportState {
         setCameraOptions {
-            zoom(12.0)
+            zoom(zoom)
             center(fromLngLat(defaultCoordinates.lon, defaultCoordinates.lat))
             pitch(0.0)
             bearing(0.0)
@@ -80,9 +69,10 @@ fun MapViewer(city: String, onCoordinatesSelected: (Coordinates) -> Unit) {
     }
 
     LaunchedEffect(coordinates) {
+        zoom = mapViewportState.cameraState?.zoom ?: 12.0
         mapViewportState.setCameraOptions {
             center(fromLngLat(coordinates.lon, coordinates.lat))
-            zoom(12.0)
+            zoom(zoom)
         }
     }
 
@@ -106,16 +96,15 @@ fun MapViewer(city: String, onCoordinatesSelected: (Coordinates) -> Unit) {
                     MapStyle(style = selectedStyle)
                 }
             },
-            scaleBar = { },
-            logo = { },
-            attribution = { },
             onMapClickListener = { point ->
-                //mapViewportState.setCameraOptions { center(point) }
                 coordinates = Coordinates(point.latitude(), point.longitude())
                 onCoordinatesSelected(coordinates)
                 markers = markers + Point.fromLngLat(coordinates.lon, coordinates.lat)
                 true
-            }
+            },
+            scaleBar = { },
+            logo = { },
+            attribution = { }
         ) {
             if (markers.isNotEmpty()) {
                 val marker = rememberIconImage(R.drawable.red_marker)
