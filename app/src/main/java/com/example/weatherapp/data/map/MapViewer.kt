@@ -64,7 +64,9 @@ fun MapViewer(city: String, onCoordinatesSelected: (Coordinates) -> Unit) {
     LaunchedEffect(city) {
         if (city.isNotEmpty()) {
             val newCoordinates = getCoordinates(city)
-            coordinates = newCoordinates ?: defaultCoordinates
+            if (newCoordinates != null && newCoordinates != coordinates) {
+                coordinates = newCoordinates
+            }
         }
     }
 
@@ -99,7 +101,7 @@ fun MapViewer(city: String, onCoordinatesSelected: (Coordinates) -> Unit) {
             onMapClickListener = { point ->
                 coordinates = Coordinates(point.latitude(), point.longitude())
                 onCoordinatesSelected(coordinates)
-                markers = markers + Point.fromLngLat(coordinates.lon, coordinates.lat)
+                markers = markers + fromLngLat(coordinates.lon, coordinates.lat)
                 true
             },
             scaleBar = { },
@@ -108,7 +110,7 @@ fun MapViewer(city: String, onCoordinatesSelected: (Coordinates) -> Unit) {
         ) {
             if (markers.isNotEmpty()) {
                 val marker = rememberIconImage(R.drawable.red_marker)
-                PointAnnotation(point = Point.fromLngLat(coordinates.lon, coordinates.lat)) {
+                PointAnnotation(point = fromLngLat(coordinates.lon, coordinates.lat)) {
                     iconImage = marker
                 }
             }

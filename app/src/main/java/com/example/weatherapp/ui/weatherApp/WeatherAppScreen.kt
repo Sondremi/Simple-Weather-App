@@ -30,6 +30,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.weatherapp.data.location.Coordinates
+import com.example.weatherapp.data.location.getCityNameFromCoordinates
 import com.example.weatherapp.data.map.MapViewer
 import com.example.weatherapp.data.weather.getTemperature
 import com.example.weatherapp.data.weather.getTemperatureData
@@ -74,6 +75,7 @@ fun WeatherApp() {
                 onCoordinatesSelected = { newCoordinates ->
                     selectedCoordinates = newCoordinates
                     CoroutineScope(Dispatchers.IO).launch {
+                        selectedCity = getCityNameFromCoordinates(newCoordinates)
                         temperature = getTemperatureData(selectedCoordinates!!.lat, selectedCoordinates!!.lon)
                     }
                 }
@@ -125,7 +127,7 @@ fun WeatherApp() {
             Spacer(modifier = Modifier.height(16.dp))
 
             Text(
-                text = if ("°C" in temperature) "Temperaturen er: $temperature" else temperature,
+                text = if ("°C" in temperature) "Temperaturen i $selectedCity er: $temperature" else temperature,
                 fontSize = 20.sp,
                 textAlign = TextAlign.Center,
                 color = Color(0xFF1C1C1E)
