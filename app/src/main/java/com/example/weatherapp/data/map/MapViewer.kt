@@ -101,6 +101,7 @@ fun MapViewer(city: String, onCoordinatesSelected: (Coordinates) -> Unit) {
                 }
                 coordinates = Coordinates(point.latitude(), point.longitude())
                 onCoordinatesSelected(coordinates)
+
                 true
             }
         )
