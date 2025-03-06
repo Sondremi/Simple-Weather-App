@@ -99,6 +99,7 @@ fun MapViewer(city: String, onCoordinatesSelected: (Coordinates) -> Unit) {
                 mapViewportState.setCameraOptions {
                     center(point)
                 }
+
                 coordinates = Coordinates(point.latitude(), point.longitude())
                 onCoordinatesSelected(coordinates)
                 true
